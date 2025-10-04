@@ -483,18 +483,23 @@
         const ctx = canvas.getContext('2d');
         
         function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = document.body.scrollHeight;
+            const dpr = window.devicePixelRatio || 1;
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = document.body.scrollHeight * dpr;
+            canvas.style.width = window.innerWidth + 'px';
+            canvas.style.height = document.body.scrollHeight + 'px';
+            ctx.scale(dpr, dpr);
             drawStars();
         }
         
         function drawStars() {
+            const dpr = window.devicePixelRatio || 1;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
             // Draw stars with varied sizes - increased to 400
             for (let i = 0; i < 400; i++) {
-                const x = Math.random() * canvas.width;
-                const y = Math.random() * canvas.height;
+                const x = Math.random() * (canvas.width / dpr);
+                const y = Math.random() * (canvas.height / dpr);
                 
                 // Better size distribution - mostly small, some medium, few larger
                 let radius;
