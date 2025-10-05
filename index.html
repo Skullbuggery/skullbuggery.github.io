@@ -32,6 +32,19 @@
             position: relative;
             overflow-x: hidden;
             margin: 0;
+            cursor: default;
+        }
+
+        * {
+            cursor: inherit;
+        }
+
+        a, button, .episode-card, .archive-button, .submit-button, .update-image {
+            cursor: pointer !important;
+        }
+
+        input, textarea {
+            cursor: text !important;
         }
 
         html {
@@ -843,7 +856,7 @@
                     <div class="loading-updates">
                         Add updates to your Google Sheet to see them here!<br>
                         <small style="color: #606060; margin-top: 10px; display: block;">
-                            Sheet columns: Date | Title | Content | Image URL (optional) | Published (checkbox)
+                            Sheet columns: Published (checkbox) | Date | Title | Content | Image URL (optional)
                         </small>
                     </div>
                 `;
