@@ -368,10 +368,69 @@
             z-index: 1;
         }
 
-        .discord-embed-container {
-            width: 100%;
-            min-height: 400px;
-            position: relative;
+        .updates-feed {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .update-card {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(75, 20, 130, 0.2);
+            border-radius: 12px;
+            padding: 20px 24px;
+            transition: all 0.3s ease;
+        }
+
+        .update-card:hover {
+            background: rgba(255, 255, 255, 0.03);
+            border-color: rgba(75, 20, 130, 0.35);
+            transform: translateX(4px);
+        }
+
+        .update-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            margin-bottom: 10px;
+            gap: 15px;
+        }
+
+        .update-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #7c4bc4;
+            margin: 0;
+            font-family: 'Special Elite', monospace;
+        }
+
+        .update-date {
+            font-size: 0.85rem;
+            color: #808080;
+            font-family: 'Cutive Mono', monospace;
+            white-space: nowrap;
+        }
+
+        .update-content {
+            color: #c0c0c0;
+            line-height: 1.6;
+            font-size: 0.95rem;
+        }
+
+        .loading-updates {
+            text-align: center;
+            color: #808080;
+            padding: 40px;
+            font-style: italic;
+        }
+
+        .error-message {
+            text-align: center;
+            color: #c0c0c0;
+            padding: 40px;
+            background: rgba(255, 100, 100, 0.05);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 100, 100, 0.2);
         }
 
         .contact-section h2 {
@@ -488,6 +547,12 @@
             .text-logo .podcast {
                 margin-right: -35%;
             }
+
+            .update-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 5px;
+            }
         }
     </style>
 </head>
@@ -513,20 +578,18 @@
             const dpr = window.devicePixelRatio || 1;
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            // Draw stars with varied sizes - increased to 400
             for (let i = 0; i < 400; i++) {
                 const x = Math.random() * (canvas.width / dpr);
                 const y = Math.random() * (canvas.height / dpr);
                 
-                // Better size distribution - mostly small, some medium, few larger
                 let radius;
                 const sizeRoll = Math.random();
                 if (sizeRoll > 0.95) {
-                    radius = Math.random() * 1 + 1.5; // 5% larger stars
+                    radius = Math.random() * 1 + 1.5;
                 } else if (sizeRoll > 0.80) {
-                    radius = Math.random() * 0.5 + 1; // 15% medium stars
+                    radius = Math.random() * 0.5 + 1;
                 } else {
-                    radius = Math.random() * 0.8 + 0.3; // 80% small stars
+                    radius = Math.random() * 0.8 + 0.3;
                 }
                 
                 const opacity = Math.random() * 0.5 + 0.4;
@@ -544,7 +607,6 @@
     
     <div class="container">
         <header>
-            <img src="your-logo.png" alt="Skullbuggery Podcast Logo" class="logo">
             <div class="text-logo">
                 <span class="the">the</span>
                 <span class="skull">Skull</span>
@@ -570,18 +632,8 @@
 
         <h2 class="section-title">Latest Updates</h2>
         <section class="updates-section">
-            <div class="discord-embed-container">
-                <widgetbot
-                    server="1424233009917198439"
-                    channel="1424233197411106866"
-                    width="100%"
-                    height="600"
-                    shard="https://e.widgetbot.io"
-                    notify="off"
-                    username="off"
-                    defer
-                ></widgetbot>
-                <script src="https://cdn.jsdelivr.net/npm/@widgetbot/html-embed"></script>
+            <div id="updates-container" class="updates-feed">
+                <div class="loading-updates">Loading updates...</div>
             </div>
         </section>
 
@@ -657,5 +709,84 @@
             <p>&copy; 2025 Skullbuggery Podcast. All rights reserved.</p>
         </footer>
     </div>
+
+    <script>
+        // Google Sheets Updates Integration
+        const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMK7Ud1M8e25BPltgQMhMRiWp5FxGdNCz1_SdwMrJwLoGlSVa45MaTMZXIp8TzV2JmJ_VqE-NiiaI1/pub?gid=0&single=true&output=csv';
+        
+        async function loadUpdates() {
+            const container = document.getElementById('updates-container');
+            
+            try {
+                const response = await fetch(SHEET_URL);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch updates');
+                }
+                
+                const csvText = await response.text();
+                console.log('CSV Data received:', csvText);
+                
+                // Simple CSV parser - split by lines and handle basic comma separation
+                const lines = csvText.split('\n');
+                const updates = [];
+                
+                // Skip header row (index 0), start from row 1
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
+                    
+                    // Split by comma, handling quoted fields
+                    const parts = line.split(',').map(part => 
+                        part.replace(/^["']|["']$/g, '').trim()
+                    );
+                    
+                    if (parts.length >= 3 && parts[1]) {
+                        updates.push({
+                            date: parts[0] || '',
+                            title: parts[1],
+                            content: parts[2] || ''
+                        });
+                    }
+                }
+                
+                console.log('Parsed updates:', updates);
+                
+                if (updates.length === 0) {
+                    container.innerHTML = '<div class="loading-updates">No updates yet. Add some to your Google Sheet!</div>';
+                    return;
+                }
+                
+                // Display updates (most recent first)
+                container.innerHTML = updates.reverse().map(update => `
+                    <div class="update-card">
+                        <div class="update-header">
+                            <h3 class="update-title">${escapeHtml(update.title)}</h3>
+                            <span class="update-date">${escapeHtml(update.date)}</span>
+                        </div>
+                        <div class="update-content">${escapeHtml(update.content)}</div>
+                    </div>
+                `).join('');
+                
+            } catch (error) {
+                console.error('Error loading updates:', error);
+                container.innerHTML = `
+                    <div class="loading-updates">
+                        Add updates to your Google Sheet to see them here!<br>
+                        <small style="color: #606060; margin-top: 10px; display: block;">
+                            Sheet should have 3 columns: Date, Title, Content
+                        </small>
+                    </div>
+                `;
+            }
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        loadUpdates();
+    </script>
 </body>
 </html>
