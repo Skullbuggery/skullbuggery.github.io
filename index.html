@@ -357,6 +357,23 @@
             z-index: 1;
         }
 
+        .updates-section {
+            max-width: 1000px;
+            margin: 0 auto 80px auto;
+            background: rgba(255, 255, 255, 0.015);
+            padding: 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(75, 20, 130, 0.15);
+            position: relative;
+            z-index: 1;
+        }
+
+        .discord-embed-container {
+            width: 100%;
+            min-height: 400px;
+            position: relative;
+        }
+
         .contact-section h2 {
             text-align: center;
             margin-bottom: 30px;
@@ -527,6 +544,7 @@
     
     <div class="container">
         <header>
+            <img src="your-logo.png" alt="Skullbuggery Podcast Logo" class="logo">
             <div class="text-logo">
                 <span class="the">the</span>
                 <span class="skull">Skull</span>
@@ -547,6 +565,19 @@
                 <p>
                     Join us as we dive deep into the paranormal and supernatural. From haunted locations and unexplained phenomena to cryptids and ghostly encounters, we explore the mysteries that lurk in the shadows. Each episode brings you compelling stories, expert interviews, and investigations into the unknown. Whether you're a believer or a skeptic, Skullbuggery will challenge what you think you know about the world beyond.
                 </p>
+            </div>
+        </section>
+
+        <h2 class="section-title">Latest Updates</h2>
+        <section class="updates-section">
+            <div class="discord-embed-container">
+                <widgetbot
+                    server="333864636967288832"
+                    channel="1424224605215653908"
+                    width="100%"
+                    height="600"
+                ></widgetbot>
+                <script src="https://cdn.jsdelivr.net/npm/@widgetbot/html-embed"></script>
             </div>
         </section>
 
