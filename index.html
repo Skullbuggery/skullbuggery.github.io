@@ -417,6 +417,65 @@
             font-size: 0.95rem;
         }
 
+        .update-image {
+            width: 100%;
+            max-width: 100%;
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-top: 12px;
+            border: 1px solid rgba(75, 20, 130, 0.2);
+            display: block;
+            cursor: pointer;
+            transition: transform 0.3s ease, border-color 0.3s ease;
+        }
+
+        .update-image:hover {
+            transform: scale(1.02);
+            border-color: rgba(75, 20, 130, 0.4);
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 95%;
+            max-height: 95%;
+            object-fit: contain;
+            border-radius: 8px;
+            box-shadow: 0 0 60px rgba(124, 75, 196, 0.5);
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 40px;
+            color: #c0c0c0;
+            cursor: pointer;
+            z-index: 10000;
+            transition: color 0.3s ease;
+        }
+
+        .lightbox-close:hover {
+            color: #7c4bc4;
+        }
+
         .loading-updates {
             text-align: center;
             color: #808080;
@@ -710,6 +769,12 @@
         </footer>
     </div>
 
+    <!-- Lightbox for full-size images -->
+    <div id="lightbox" class="lightbox">
+        <span class="lightbox-close">&times;</span>
+        <img id="lightbox-img" src="" alt="">
+    </div>
+
     <script>
         // Google Sheets Updates Integration
         const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMK7Ud1M8e25BPltgQMhMRiWp5FxGdNCz1_SdwMrJwLoGlSVa45MaTMZXIp8TzV2JmJ_VqE-NiiaI1/pub?gid=0&single=true&output=csv';
@@ -744,7 +809,8 @@
                         updates.push({
                             date: parts[0] || '',
                             title: parts[1],
-                            content: parts[2] || ''
+                            content: parts[2] || '',
+                            image: parts[3] || '' // Optional 4th column for image URL
                         });
                     }
                 }
@@ -764,6 +830,7 @@
                             <span class="update-date">${escapeHtml(update.date)}</span>
                         </div>
                         <div class="update-content">${escapeHtml(update.content)}</div>
+                        ${update.image ? `<img src="${escapeHtml(update.image)}" alt="${escapeHtml(update.title)}" class="update-image" onclick="openLightbox('${escapeHtml(update.image)}')">` : ''}
                     </div>
                 `).join('');
                 
@@ -773,7 +840,7 @@
                     <div class="loading-updates">
                         Add updates to your Google Sheet to see them here!<br>
                         <small style="color: #606060; margin-top: 10px; display: block;">
-                            Sheet should have 3 columns: Date, Title, Content
+                            Sheet columns: Date | Title | Content | Image URL (optional)
                         </small>
                     </div>
                 `;
@@ -785,6 +852,40 @@
             div.textContent = text;
             return div.innerHTML;
         }
+        
+        // Lightbox functionality
+        function openLightbox(imageSrc) {
+            const lightbox = document.getElementById('lightbox');
+            const lightboxImg = document.getElementById('lightbox-img');
+            lightboxImg.src = imageSrc;
+            lightbox.classList.add('active');
+        }
+        
+        function closeLightbox() {
+            const lightbox = document.getElementById('lightbox');
+            lightbox.classList.remove('active');
+        }
+        
+        // Close lightbox when clicking background or X button
+        document.addEventListener('DOMContentLoaded', function() {
+            const lightbox = document.getElementById('lightbox');
+            const closeBtn = document.querySelector('.lightbox-close');
+            
+            lightbox.addEventListener('click', function(e) {
+                if (e.target === lightbox) {
+                    closeLightbox();
+                }
+            });
+            
+            closeBtn.addEventListener('click', closeLightbox);
+            
+            // Close with Escape key
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    closeLightbox();
+                }
+            });
+        });
         
         loadUpdates();
     </script>
