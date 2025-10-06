@@ -340,7 +340,7 @@
 
         .archive-section {
             text-align: right;
-            margin-bottom: 80px;
+            margin-bottom: 40px;
             position: relative;
             z-index: 1;
             max-width: 1200px;
@@ -408,10 +408,17 @@
             margin: 0 auto 80px auto;
             background: rgba(255, 255, 255, 0.015);
             padding: 30px;
+            padding-top: 0;
             border-radius: 20px;
             border: 1px solid rgba(75, 20, 130, 0.15);
             position: relative;
             z-index: 1;
+        }
+
+        .updates-section .section-title {
+            padding-top: 30px;
+            padding-left: 0;
+            padding-right: 0;
         }
 
         .updates-feed {
@@ -794,8 +801,8 @@
             <a href="https://open.spotify.com/show/37cxsQ6Ag6gXNmau864pEV" class="archive-button" target="_blank">Case History</a>
         </section>
 
-        <h2 class="section-title">Transmissions:</h2>
         <section class="updates-section">
+            <h2 class="section-title">Transmissions:</h2>
             <div id="updates-container" class="updates-feed">
                 <div class="loading-updates">Loading updates...</div>
             </div>
