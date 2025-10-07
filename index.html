@@ -347,7 +347,7 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 20px;
-            margin-bottom: 40px;
+            margin-bottom: 60px;
             position: relative;
             z-index: 1;
             max-width: 1000px;
@@ -359,6 +359,12 @@
             border-top: none;
             border-bottom-left-radius: 20px;
             border-bottom-right-radius: 20px;
+        }
+
+        .archive-button-container {
+            grid-column: 1 / -1;
+            text-align: right;
+            padding-top: 10px;
         }
 
         .episode-card {
@@ -889,11 +895,11 @@
                     <p>More paranormal mysteries on the way!</p>
                 </div>
             </a>
-        </div>
 
-        <section class="archive-section">
-            <a href="https://open.spotify.com/show/37cxsQ6Ag6gXNmau864pEV" class="archive-button" target="_blank">Case History</a>
-        </section>
+            <div class="archive-button-container">
+                <a href="https://open.spotify.com/show/37cxsQ6Ag6gXNmau864pEV" class="archive-button" target="_blank">Case History</a>
+            </div>
+        </div>
 
         <section class="featured-player">
             <h2>The Soundtrack:</h2>
