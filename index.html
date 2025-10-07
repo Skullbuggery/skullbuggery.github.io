@@ -536,6 +536,18 @@
             white-space: nowrap;
         }
 
+        .update-author {
+            font-size: 0.85rem;
+            color: #7c4bc4;
+            font-family: 'Cutive Mono', monospace;
+            margin-top: 8px;
+        }
+
+        .update-author::before {
+            content: "Posted by ";
+            color: #808080;
+        }
+
         .update-content {
             color: #c0c0c0;
             line-height: 1.6;
@@ -879,6 +891,10 @@
             </a>
         </div>
 
+        <section class="archive-section">
+            <a href="https://open.spotify.com/show/37cxsQ6Ag6gXNmau864pEV" class="archive-button" target="_blank">Case History</a>
+        </section>
+
         <section class="featured-player">
             <h2>The Soundtrack:</h2>
             <div class="spotify-embed">
@@ -887,10 +903,6 @@
             <p style="text-align: center; margin-top: 15px; color: #a0a0a0; font-size: 0.9rem;">
                 Original music by <a href="https://open.spotify.com/artist/7y0iDhS40VOiVmImKiaTyR" target="_blank" style="color: #7c4bc4; text-decoration: none; transition: color 0.3s ease;">Spacebard</a>
             </p>
-        </section>
-
-        <section class="archive-section">
-            <a href="https://open.spotify.com/show/37cxsQ6Ag6gXNmau864pEV" class="archive-button" target="_blank">Case History</a>
         </section>
 
         <section class="updates-section">
@@ -964,7 +976,8 @@
                             date: parts[1] || '',
                             title: parts[2],
                             content: parts[3] || '',
-                            image: parts[4] || ''
+                            image: parts[4] || '',
+                            author: parts[5] || ''
                         });
                     }
                 }
@@ -984,6 +997,7 @@
                         </div>
                         <div class="update-content">${escapeHtml(update.content)}</div>
                         ${update.image ? `<img src="${escapeHtml(update.image)}" alt="${escapeHtml(update.title)}" class="update-image" onclick="openLightbox('${escapeHtml(update.image)}')">` : ''}
+                        ${update.author ? `<div class="update-author">${escapeHtml(update.author)}</div>` : ''}
                     </div>
                 `).join('');
                 
