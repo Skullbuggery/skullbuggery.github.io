@@ -17,6 +17,17 @@
             z-index: 0;
             pointer-events: none;
         }
+
+        #forest-bg {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 600px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -75,12 +86,47 @@
 
         header {
             text-align: center;
-            margin-bottom: 40px;
+            margin-bottom: 20px;
             margin-top: 60px;
             position: relative;
             z-index: 1;
             display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .spotify-links {
+            display: flex;
+            gap: 30px;
+            align-items: center;
             justify-content: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+            font-size: 0.9rem;
+        }
+
+        .spotify-links a {
+            color: #a0a0a0;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .spotify-links a:hover {
+            color: #7c4bc4;
+        }
+
+        .spotify-links a:hover .spotify-icon {
+            fill: #7c4bc4;
+        }
+
+        .spotify-icon {
+            width: 20px;
+            height: 20px;
+            fill: #a0a0a0;
+            transition: fill 0.3s ease;
         }
 
         .logo {
@@ -764,14 +810,66 @@
             .archive-section {
                 text-align: center;
             }
+
+            .spotify-links {
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .spotify-links span[style] {
+                display: none;
+            }
         }
     </style>
 </head>
 <body>
     <canvas id="stars-canvas"></canvas>
     
+    <svg id="forest-bg" viewBox="0 0 1200 600" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="mistGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#0a0a0a;stop-opacity:0" />
+                <stop offset="100%" style="stop-color:#1a1a2a;stop-opacity:0.3" />
+            </linearGradient>
+            
+            <linearGradient id="backTreeLight" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#3d2d4a;stop-opacity:1" />
+                <stop offset="30%" style="stop-color:#1d1824;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#1a1a28;stop-opacity:1" />
+            </linearGradient>
+            
+            <linearGradient id="midTreeLight" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#483850;stop-opacity:1" />
+                <stop offset="30%" style="stop-color:#28223a;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#252535;stop-opacity:1" />
+            </linearGradient>
+            
+            <linearGradient id="frontTreeLight" x1="0%" y1="0%" x2="0%" y2="100%">
+                <stop offset="0%" style="stop-color:#2a1a35;stop-opacity:1" />
+                <stop offset="25%" style="stop-color:#0f0a15;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#05050a;stop-opacity:1" />
+            </linearGradient>
+        </defs>
+        
+        <!-- Back layer - distant hills with gentle peaks and valleys -->
+        <g opacity="0.6">
+            <path d="M 0,555 Q 100,550 200,540 Q 300,535 400,545 Q 500,555 600,550 Q 700,540 800,535 Q 900,545 1000,555 Q 1100,550 1200,545 L 1200,600 L 0,600 Z" fill="url(#backTreeLight)"/>
+        </g>
+        
+        <!-- Middle layer - rolling hills with varied elevation -->
+        <g opacity="0.75">
+            <path d="M 0,520 Q 80,515 160,505 Q 240,495 320,510 Q 400,525 480,520 Q 560,510 640,500 Q 720,490 800,505 Q 880,520 960,515 Q 1040,505 1120,515 Q 1160,520 1200,515 L 1200,600 L 0,600 Z" fill="url(#midTreeLight)"/>
+        </g>
+        
+        <!-- Front layer - smooth peaks and troughs (darkest) -->
+        <g opacity="0.9">
+            <path d="M 0,485 Q 100,475 200,465 Q 300,455 400,470 Q 500,485 600,480 Q 700,470 800,460 Q 900,450 1000,465 Q 1100,480 1200,475 L 1200,600 L 0,600 Z" fill="url(#frontTreeLight)"/>
+        </g>
+        
+        <rect x="0" y="450" width="1200" height="150" fill="url(#mistGradient)"/>
+    </svg>
+    
     <script>
-        // Create starry background
         const canvas = document.getElementById('stars-canvas');
         const ctx = canvas.getContext('2d');
         
@@ -823,6 +921,21 @@
                 <span class="skull">Skull</span>
                 <span class="buggery">Buggery</span>
                 <span class="podcast">podcast.</span>
+            </div>
+            <div class="spotify-links">
+                <a href="https://open.spotify.com/show/37cxsQ6Ag6gXNmau864pEV" target="_blank">
+                    <svg class="spotify-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                    </svg>
+                    <span>Listen on Spotify</span>
+                </a>
+                <span style="color: #5e2a9e;">|</span>
+                <a href="https://open.spotify.com/artist/7y0iDhS40VOiVmImKiaTyR" target="_blank">
+                    <svg class="spotify-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 0C5.4 0 0 5.4 0 12s5.4 12 12 12 12-5.4 12-12S18.66 0 12 0zm5.521 17.34c-.24.359-.66.48-1.021.24-2.82-1.74-6.36-2.101-10.561-1.141-.418.122-.779-.179-.899-.539-.12-.421.18-.78.54-.9 4.56-1.021 8.52-.6 11.64 1.32.42.18.479.659.301 1.02zm1.44-3.3c-.301.42-.841.6-1.262.3-3.239-1.98-8.159-2.58-11.939-1.38-.479.12-1.02-.12-1.14-.6-.12-.48.12-1.021.6-1.141C9.6 9.9 15 10.561 18.72 12.84c.361.181.54.78.241 1.2zm.12-3.36C15.24 8.4 8.82 8.16 5.16 9.301c-.6.179-1.2-.181-1.38-.721-.18-.601.18-1.2.72-1.381 4.26-1.26 11.28-1.02 15.721 1.621.539.3.719 1.02.419 1.56-.299.421-1.02.599-1.559.3z"/>
+                    </svg>
+                    <span>Music by Spacebard</span>
+                </a>
             </div>
         </header>
 
@@ -901,16 +1014,6 @@
             </div>
         </div>
 
-        <section class="featured-player">
-            <h2>The Soundtrack:</h2>
-            <div class="spotify-embed">
-                <iframe style="border-radius:12px" src="https://open.spotify.com/embed/track/4cjY194CDTnhCRfRMwvgYZ?utm_source=generator" width="100%" height="352" frameBorder="0" allowfullscreen="" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy"></iframe>
-            </div>
-            <p style="text-align: center; margin-top: 15px; color: #a0a0a0; font-size: 0.9rem;">
-                Original music by <a href="https://open.spotify.com/artist/7y0iDhS40VOiVmImKiaTyR" target="_blank" style="color: #7c4bc4; text-decoration: none; transition: color 0.3s ease;">Spacebard</a>
-            </p>
-        </section>
-
         <section class="updates-section">
             <h2 class="section-title">Transmissions:</h2>
             <div id="updates-container" class="updates-feed">
@@ -920,7 +1023,7 @@
 
         <section class="contact-section">
             <h2>Get In Touch</h2>
-            <form>
+            <form action="https://formspree.io/f/mwprnngw" method="POST">
                 <div class="form-group">
                     <label for="name">Name</label>
                     <input type="text" id="name" name="name" required>
@@ -942,14 +1045,12 @@
         </footer>
     </div>
 
-    <!-- Lightbox for full-size images -->
     <div id="lightbox" class="lightbox">
         <span class="lightbox-close">&times;</span>
         <img id="lightbox-img" src="" alt="">
     </div>
 
     <script>
-        // Google Sheets Updates Integration
         const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTMK7Ud1M8e25BPltgQMhMRiWp5FxGdNCz1_SdwMrJwLoGlSVa45MaTMZXIp8TzV2JmJ_VqE-NiiaI1/pub?gid=0&single=true&output=csv';
         
         async function loadUpdates() {
